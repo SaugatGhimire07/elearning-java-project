@@ -75,9 +75,9 @@ public class RegisterServlet extends HttpServlet {
 
             // Redirect based on user type
             if ("Instructor".equals(user.getUserType())) {
-                response.sendRedirect(request.getContextPath() + "/Views/Course/courseList.jsp");
+                response.sendRedirect(request.getContextPath() + "/course");
             } else {
-                response.sendRedirect(request.getContextPath() + "/Views/Frontend/index.jsp");
+                response.sendRedirect(request.getContextPath() + "/index");
             }
         } else {
             // Registration failed
