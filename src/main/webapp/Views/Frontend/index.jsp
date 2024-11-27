@@ -1,11 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+	
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>NextAcademy</title>
-<link rel="stylesheet" href="../Css/index.css" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/Views/Css/index.css" />
 
 </head>
 <body>
@@ -31,10 +36,28 @@
 					<div class="user-profile">
 						<img src="https://via.placeholder.com/32" alt="User" />
 						<div class="user">
-							<span>Rupesh Karki</span>
-							<p>Learner</p>
+							<span> <%
+ String fullName = (String) session.getAttribute("fullName");
+ if (fullName != null) {
+ 	out.print(fullName);
+ } else {
+ 	out.print("Guest");
+ }
+ %>
+							</span>
+							<p>
+								<%
+								String userType = (String) session.getAttribute("userType");
+								if (userType != null) {
+									out.print(userType);
+								} else {
+									out.print("Visitor");
+								}
+								%>
+							</p>
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</header>
@@ -114,48 +137,22 @@
 				<h2>Most Popular Certificate</h2>
 				<a href="#">See all &gt;&gt;</a>
 			</div>
+
 			<div class="certificates">
-				<div class="certificate-card">
-					<img src="https://via.placeholder.com/150" alt="React Course" />
-					<div class="certificate-info">
-						<h3 class="certificate-title">React Basics: The Complete
-							Bootcamp</h3>
-						<p class="certificate-author">Saugat Ghimire</p>
-						<p class="certificate-price">$ 25.95</p>
+				<c:forEach var="course" items="${lastFourCourses}">
+					<div class="certificate-card">
+						<img src="${pageContext.request.contextPath}${course.coverImageUrl}" alt="${course.courseTitle}" />
+						<div class="certificate-info">
+							<h3 class="certificate-title">${course.courseTitle}</h3>
+							<p class="certificate-author">${course.instructorName}</p>
+							<p class="certificate-price">${course.price}</p>
+						</div>
 					</div>
-				</div>
-
-				<div class="certificate-card">
-					<img src="https://via.placeholder.com/150" alt="Prompt Engineering" />
-					<div class="certificate-info">
-						<h3 class="certificate-title">Prompt Engineering</h3>
-						<p class="certificate-author">Rupesh Karki</p>
-						<p class="certificate-price">$ 18.99</p>
-					</div>
-				</div>
-
-				<div class="certificate-card">
-					<img src="https://via.placeholder.com/150"
-						alt="Web Development Course" />
-					<div class="certificate-info">
-						<h3 class="certificate-title">Complete Web Development
-							Course: Zero to Hero</h3>
-						<p class="certificate-author">Saugat Ghimire</p>
-						<p class="certificate-price">$ 25.95</p>
-					</div>
-				</div>
-
-				<div class="certificate-card">
-					<img src="https://via.placeholder.com/150" alt="AWS Course" />
-					<div class="certificate-info">
-						<h3 class="certificate-title">AWS Certified Cloud
-							Practitioner</h3>
-						<p class="certificate-author">Stephane Maarek</p>
-						<p class="certificate-price">$ 25.95</p>
-					</div>
-				</div>
+				</c:forEach>
 			</div>
 		</section>
+
+
 	</div>
 	<footer class="footer">
 		<div class="footer-container">

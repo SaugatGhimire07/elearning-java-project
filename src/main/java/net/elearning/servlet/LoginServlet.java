@@ -49,12 +49,13 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("userId", user.getUserId());
             session.setAttribute("userType", user.getUserType());
+            session.setAttribute("fullName", user.getFullName());
 
             // Redirect based on user type
             if ("Instructor".equals(user.getUserType())) {
-                response.sendRedirect(request.getContextPath() + "/Views/Frontend/courseList.jsp");
+                response.sendRedirect(request.getContextPath() + "/course");
             } else if ("Student".equals(user.getUserType())) {
-                response.sendRedirect(request.getContextPath() + "/Views/Frontend/index.jsp");
+                response.sendRedirect(request.getContextPath() + "/index");
             } else {
                 response.sendRedirect(request.getContextPath() + "/");
             }

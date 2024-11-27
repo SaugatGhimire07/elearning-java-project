@@ -36,13 +36,16 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
         // Retrieve form parameters
         String fullName = request.getParameter("fullName");
-        String userType = "Student";
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        
+        String isInstructorChecked = request.getParameter("isInstructor");
+
+        // Determine user type based on the checkbox
+        String userType = (isInstructorChecked != null && isInstructorChecked.equals("on")) ? "Instructor" : "Student";
+
         // Validate input
-        if (fullName == null || userType == null || email == null || password == null ||
-                fullName.isEmpty() || userType.isEmpty() || email.isEmpty() || password.isEmpty()) {
+        if (fullName == null || email == null || password == null ||
+                fullName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             request.setAttribute("error", "All fields are required.");
             request.getRequestDispatcher("/Views/User/register.jsp").forward(request, response);
             return;
@@ -68,17 +71,13 @@ public class RegisterServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("userId", user.getUserId());
             session.setAttribute("userType", user.getUserType());
+            session.setAttribute("fullName", user.getFullName());
 
             // Redirect based on user type
             if ("Instructor".equals(user.getUserType())) {
-                response.sendRedirect(request.getContextPath() + "/Views/Frontend/courseList.jsp");
-            } else if ("Student".equals(user.getUserType())) {
-                response.sendRedirect(request.getContextPath() + "/Views/Frontend/index.jsp");
+                response.sendRedirect(request.getContextPath() + "/Views/Course/courseList.jsp");
             } else {
-            	// Default fallback
-            	System.out.println("An unexpected error occurred. Please try again.");
-            	request.getRequestDispatcher("/Views/User/register.jsp").forward(request, response);
-
+                response.sendRedirect(request.getContextPath() + "/Views/Frontend/index.jsp");
             }
         } else {
             // Registration failed

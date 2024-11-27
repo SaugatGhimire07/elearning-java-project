@@ -13,10 +13,13 @@ public class Course {
     private int instructorId;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    
+    private String instructorName;
 
     // Constructor
     public Course() {
     }
+    
 
     public Course(int courseId, String courseTitle, String description, String learningOutcome,
                   String experienceLevel, double price, String coverImageUrl, int instructorId,
@@ -31,6 +34,14 @@ public class Course {
         this.instructorId = instructorId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+    
+    public String getInstructorName() {
+        return instructorName;
+    }
+
+    public void setInstructorName(String instructorName) {
+        this.instructorName = instructorName;
     }
 
     // Getters and Setters
@@ -55,7 +66,7 @@ public class Course {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = description != null ? description.trim() : null;
     }
 
     public String getLearningOutcome() {
@@ -63,7 +74,7 @@ public class Course {
     }
 
     public void setLearningOutcome(String learningOutcome) {
-        this.learningOutcome = learningOutcome;
+        this.learningOutcome = learningOutcome != null ? learningOutcome.trim() : null;
     }
 
     public String getExperienceLevel() {

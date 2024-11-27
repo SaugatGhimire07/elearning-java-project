@@ -1,18 +1,18 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Course</title>
-    
-    <!-- Bootstrap CSS from CDN -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create New Course</title>
+
+<!-- Bootstrap CSS from CDN -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">Create New Course</h1>
-        <form action="<%= request.getContextPath() %>/course" method="POST" enctype="multipart/form-data">
+        <form action="<%=request.getContextPath()%>/course" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="courseTitle">Course Title:</label>
                 <input type="text" class="form-control" id="courseTitle" name="courseTitle" required>
@@ -29,14 +29,13 @@
             </div>
 
             <div class="form-group">
-			    <label for="experienceLevel">Experience Level:</label>
-			    <select class="form-control" id="experienceLevel" name="experienceLevel" required>
-			        <option value="Beginner">Beginner</option>
-			        <option value="Intermediate">Intermediate</option>
-			        <option value="Advanced">Advanced</option>
-			    </select>
-			</div>
-
+                <label for="experienceLevel">Experience Level:</label>
+                <select class="form-control" id="experienceLevel" name="experienceLevel" required>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+            </div>
 
             <div class="form-group">
                 <label for="price">Price:</label>
@@ -44,13 +43,8 @@
             </div>
 
             <div class="form-group">
-			    <label for="coverImageUrl">Cover Image:</label>
-			    <input type="file" class="form-control-file" id="coverImageUrl" name="coverImageUrl" accept="image/*">
-			</div>
-
-            <div class="form-group">
-                <label for="instructorId">Instructor ID:</label>
-                <input type="number" class="form-control" id="instructorId" name="instructorId" required>
+                <label for="coverImageUrl">Cover Image:</label>
+                <input type="file" class="form-control-file" id="coverImageUrl" name="coverImageUrl" accept="image/*">
             </div>
 
             <button type="submit" class="btn btn-primary">Create Course</button>
