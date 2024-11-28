@@ -142,6 +142,7 @@ public class CourseServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Handle multipart form data (file upload)
+    	System.out.println(request);
         String courseTitle = request.getParameter("courseTitle");
         String description = request.getParameter("description");
         String learningOutcome = request.getParameter("learningOutcome");
@@ -175,7 +176,7 @@ public class CourseServlet extends HttpServlet {
         newCourse.setPrice(price);
         newCourse.setCoverImageUrl(coverImageUrl);  // Set the uploaded image path
         newCourse.setInstructorId(instructorId);
-
+//        newCourse.setInstructorId(1);
         // Insert the course into the database using CourseDao
         int generatedCourseId = courseDao.insertCourse(newCourse);
         System.out.println("Generated Course ID: " + generatedCourseId);

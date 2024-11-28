@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-	
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 
 <!DOCTYPE html>
 <html>
@@ -141,7 +141,9 @@
 			<div class="certificates">
 				<c:forEach var="course" items="${lastFourCourses}">
 					<div class="certificate-card">
-						<img src="${pageContext.request.contextPath}${course.coverImageUrl}" alt="${course.courseTitle}" />
+						<img
+							src="${pageContext.request.contextPath}${course.coverImageUrl}"
+							alt="${course.courseTitle}" />
 						<div class="certificate-info">
 							<h3 class="certificate-title">${course.courseTitle}</h3>
 							<p class="certificate-author">${course.instructorName}</p>
