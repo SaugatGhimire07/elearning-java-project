@@ -12,9 +12,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -302,7 +304,21 @@ public class CourseServlet extends HttpServlet {
     
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String courseIdParam = request.getParameter("courseId");
+     // Read the JSON body of the request
+        StringBuilder stringBuilder = new StringBuilder();
+        String line;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()))) {
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        }
+
+        // Parse the JSON-like string manually to extract courseId
+        String json = stringBuilder.toString();
+
+        // Find the courseId from the body (assuming format like: {"courseId": "123"})
+        String courseIdParam = json.replaceAll("[^0-9]", ""); // Extract the numeric part of the courseId
+
 
         if (courseIdParam == null || courseIdParam.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
