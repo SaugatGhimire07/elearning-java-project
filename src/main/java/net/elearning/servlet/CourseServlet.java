@@ -168,29 +168,69 @@ public class CourseServlet extends HttpServlet {
             coverImageUrl = handleFileUpload(coverImagePart);  // Get the uploaded file's path
         }
 
-        // Create a new Course object with the form data
-        Course newCourse = new Course();
-        newCourse.setCourseTitle(courseTitle);
-        newCourse.setDescription(description);
-        newCourse.setLearningOutcome(learningOutcome);
-        newCourse.setExperienceLevel(experienceLevel);
-        newCourse.setPrice(price);
-        newCourse.setCoverImageUrl(coverImageUrl);  // Set the uploaded image path
-        newCourse.setInstructorId(instructorId);
+        // gets the course id if we are editing the course
+        String courseIdParam = request.getParameter("courseId");
+        Course course;
+        //if course id is not empty and null 
+        if (courseIdParam != null && !courseIdParam.isEmpty()) {
+            // Course ID is provided, update the existing course
+            int courseId = Integer.parseInt(courseIdParam);
 
-        // Insert the course into the database using CourseDao
-        int generatedCourseId = courseDao.insertCourse(newCourse);
-        System.out.println("Generated Course ID: " + generatedCourseId);
+            // Retrieve the existing course from the database
+            course = courseDao.getCourseById(courseId);
+            if (course == null) {
+                request.setAttribute("errorMessage", "Course not found.");
+                request.getRequestDispatcher("/Views/Course/createCourse.jsp").forward(request, response);
+                return;
+            }
 
-        // Check if the course insertion was successful
-        if (generatedCourseId != -1) {
-            // Redirect to a success page or list of courses
-            String redirectUrl = request.getContextPath() + "/course";
-            response.sendRedirect(redirectUrl);
+            // Ensure the instructorId matches the course's instructorId (optional security check)
+            if (course.getInstructorId() != instructorId) {
+                request.setAttribute("errorMessage", "You are not authorized to update this course.");
+                request.getRequestDispatcher("/Views/Course/createCourse.jsp").forward(request, response);
+                return;
+            }
+
+            // Update course properties
+            course.setCourseTitle(courseTitle);
+            course.setDescription(description);
+            course.setLearningOutcome(learningOutcome);
+            course.setExperienceLevel(experienceLevel);
+            course.setPrice(price);
+
+            // Set new cover image URL
+            if (coverImageUrl != null) {
+                course.setCoverImageUrl(coverImageUrl);
+            }
+
+            // Call CourseDAO and update the course
+            boolean updated = courseDao.updateCourse(course);
+            if (updated) {
+                response.sendRedirect(request.getContextPath() + "/course?action=listCourses");
+            } else {
+                request.setAttribute("errorMessage", "Failed to update the course.");
+                request.getRequestDispatcher("/Views/Course/createCourse.jsp").forward(request, response);
+            }
+
         } else {
-            // Handle failure by redirecting back to createCourse.jsp with an error message
-            request.setAttribute("errorMessage", "Failed to create course. Please try again.");
-            request.getRequestDispatcher("/Views/Course/createCourse.jsp").forward(request, response);
+            // if there is no course id present that means create a new course
+            course = new Course();
+            course.setCourseTitle(courseTitle);
+            course.setDescription(description);
+            course.setLearningOutcome(learningOutcome);
+            course.setExperienceLevel(experienceLevel);
+            course.setPrice(price);
+            course.setCoverImageUrl(coverImageUrl); // Set the uploaded image path
+            course.setInstructorId(instructorId);
+
+            // Insert the new course into the database
+            int generatedCourseId = courseDao.insertCourse(course);
+            if (generatedCourseId != -1) {
+                response.sendRedirect(request.getContextPath() + "/course");
+            } else {
+                request.setAttribute("errorMessage", "Failed to create the course. Please try again.");
+                request.getRequestDispatcher("/Views/Course/createCourse.jsp").forward(request, response);
+            }
         }
     }
 
@@ -201,7 +241,6 @@ public class CourseServlet extends HttpServlet {
         // Ensure the directory exists
         if (!dir.exists()) {
             dir.mkdirs();
-            System.out.println("Directory created: " + uploadDir);
         }
 
         // Get the file name
@@ -211,95 +250,95 @@ public class CourseServlet extends HttpServlet {
         // Save the uploaded file to the server
         try (InputStream fileContent = filePart.getInputStream()) {
             Files.copy(fileContent, Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("File uploaded to: " + filePath);
         }
 
         return "/uploads/" + fileName;  // Return relative path
     }
 
+
     
-    @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Parse course ID from the request parameter
-        String courseIdParam = request.getParameter("courseId");
-        
-        // Check if courseId is missing or invalid
-        if (courseIdParam == null || courseIdParam.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("Missing or invalid courseId");
-            return;
-        }
-
-        try {
-            // Parse the courseId to integer
-            int courseId = Integer.parseInt(courseIdParam);
-
-            // Retrieve updated form data from the request
-            String courseTitle = request.getParameter("courseTitle");
-            String description = request.getParameter("description");
-            String learningOutcome = request.getParameter("learningOutcome");
-            String experienceLevel = request.getParameter("experienceLevel");
-            double price = Double.parseDouble(request.getParameter("price"));
-
-            // Optionally get the instructorId from the request (if needed for security checks)
-            int instructorId = Integer.parseInt(request.getParameter("instructorId"));
-
-            // Handle file upload (if a new cover image is provided)
-            Part coverImagePart = request.getPart("coverImageUrl");
-            String coverImageUrl = null;
-
-            if (coverImagePart != null && coverImagePart.getSize() > 0) {
-                coverImageUrl = handleFileUpload(coverImagePart); // Upload the new file and get the path
-            }
-
-            // Fetch the existing course from the database to ensure it exists
-            Course existingCourse = courseDao.getCourseById(courseId);
-            if (existingCourse == null) {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                response.getWriter().write("Course with ID " + courseId + " not found");
-                return;
-            }
-
-            // Ensure the instructorId matches the existing course instructorId
-            if (existingCourse.getInstructorId() != instructorId) {
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                response.getWriter().write("You are not authorized to update this course");
-                return;
-            }
-
-            // Update the fields of the existing course
-            existingCourse.setCourseTitle(courseTitle);
-            existingCourse.setDescription(description);
-            existingCourse.setLearningOutcome(learningOutcome);
-            existingCourse.setExperienceLevel(experienceLevel);
-            existingCourse.setPrice(price);
-            
-            // If a new cover image is uploaded, replace the existing one
-            if (coverImageUrl != null) {
-                existingCourse.setCoverImageUrl(coverImageUrl);
-            }
-
-            // Call the DAO to update the course in the database
-            boolean isUpdated = courseDao.updateCourse(existingCourse);
-
-            // If updated successfully, redirect to the course list page
-            if (isUpdated) {
-                String redirectUrl = request.getContextPath() + "/course?action=listCourses";
-                response.sendRedirect(redirectUrl);
-            } else {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.getWriter().write("Failed to update the course. Please try again.");
-            }
-
-        } catch (NumberFormatException e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("Invalid courseId or numerical values provided");
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("An error occurred: " + e.getMessage());
-            e.printStackTrace();  // Log the full error stack for debugging
-        }
-    }
+   // @Override
+//    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        // Parse course ID from the request parameter
+//        String courseIdParam = request.getParameter("courseId");
+//        
+//        // Check if courseId is missing or invalid
+//        if (courseIdParam == null || courseIdParam.isEmpty()) {
+//            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            response.getWriter().write("Missing or invalid courseId");
+//            return;
+//        }
+//
+//        try {
+//            // Parse the courseId to integer
+//            int courseId = Integer.parseInt(courseIdParam);
+//
+//            // Retrieve updated form data from the request
+//            String courseTitle = request.getParameter("courseTitle");
+//            String description = request.getParameter("description");
+//            String learningOutcome = request.getParameter("learningOutcome");
+//            String experienceLevel = request.getParameter("experienceLevel");
+//            double price = Double.parseDouble(request.getParameter("price"));
+//
+//            // Optionally get the instructorId from the request (if needed for security checks)
+//            int instructorId = Integer.parseInt(request.getParameter("instructorId"));
+//
+//            // Handle file upload (if a new cover image is provided)
+//            Part coverImagePart = request.getPart("coverImageUrl");
+//            String coverImageUrl = null;
+//
+//            if (coverImagePart != null && coverImagePart.getSize() > 0) {
+//                coverImageUrl = handleFileUpload(coverImagePart); // Upload the new file and get the path
+//            }
+//
+//            // Fetch the existing course from the database to ensure it exists
+//            Course existingCourse = courseDao.getCourseById(courseId);
+//            if (existingCourse == null) {
+//                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+//                response.getWriter().write("Course with ID " + courseId + " not found");
+//                return;
+//            }
+//
+//            // Ensure the instructorId matches the existing course instructorId
+//            if (existingCourse.getInstructorId() != instructorId) {
+//                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//                response.getWriter().write("You are not authorized to update this course");
+//                return;
+//            }
+//
+//            // Update the fields of the existing course
+//            existingCourse.setCourseTitle(courseTitle);
+//            existingCourse.setDescription(description);
+//            existingCourse.setLearningOutcome(learningOutcome);
+//            existingCourse.setExperienceLevel(experienceLevel);
+//            existingCourse.setPrice(price);
+//            
+//            // If a new cover image is uploaded, replace the existing one
+//            if (coverImageUrl != null) {
+//                existingCourse.setCoverImageUrl(coverImageUrl);
+//            }
+//
+//            // Call the DAO to update the course in the database
+//            boolean isUpdated = courseDao.updateCourse(existingCourse);
+//
+//            // If updated successfully, redirect to the course list page
+//            if (isUpdated) {
+//                String redirectUrl = request.getContextPath() + "/course?action=listCourses";
+//                response.sendRedirect(redirectUrl);
+//            } else {
+//                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//                response.getWriter().write("Failed to update the course. Please try again.");
+//            }
+//
+//        } catch (NumberFormatException e) {
+//            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            response.getWriter().write("Invalid courseId or numerical values provided");
+//        } catch (Exception e) {
+//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//            response.getWriter().write("An error occurred: " + e.getMessage());
+//            e.printStackTrace();  // Log the full error stack for debugging
+//        }
+//    }
 
     
     @Override
@@ -315,9 +354,8 @@ public class CourseServlet extends HttpServlet {
 
         // Parse the JSON-like string manually to extract courseId
         String json = stringBuilder.toString();
-
-        // Find the courseId from the body (assuming format like: {"courseId": "123"})
-        String courseIdParam = json.replaceAll("[^0-9]", ""); // Extract the numeric part of the courseId
+        //get the numeric course value
+        String courseIdParam = json.replaceAll("[^0-9]", "");
 
 
         if (courseIdParam == null || courseIdParam.isEmpty()) {
