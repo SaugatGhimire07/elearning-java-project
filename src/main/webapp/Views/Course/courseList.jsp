@@ -67,6 +67,7 @@
 	                <td><%= course.getExperienceLevel() %></td>
 	                <td><%= course.getPrice() %></td>
 	                <td>
+	                	<a href="<%= request.getContextPath() %>/lesson?courseId=<%= course.getCourseId() %>" class="btn btn-info btn-sm">Add Lesson</a>
 	                    <a href="<%= request.getContextPath() %>/course?action=edit&courseId=<%= course.getCourseId() %>" class="btn btn-warning btn-sm">Edit</a>
 	                    <a href="javascript:void(0);" onclick="deleteCourse(<%= course.getCourseId() %>)" class="btn btn-danger btn-sm">Delete</a>
 	                </td>

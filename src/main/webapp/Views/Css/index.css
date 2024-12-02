@@ -379,6 +379,7 @@ nav a:hover {
 	flex-direction: column;
 	align-items: center;
 	text-align: center;
+	cursor: pointer
 }
 
 .certificate-card img {
