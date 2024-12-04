@@ -1,2 +1,2 @@
 # Ignore DatabaseConnection.java
-/src/main/java/net/elearning/Dao/DatabaseConnection.java
+/src/main/java/net/elearning/dao/DatabaseConnection.java
