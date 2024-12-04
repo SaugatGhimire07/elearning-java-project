@@ -62,7 +62,7 @@
 			</div>
 		</header>
 		<div class="navbar1">
-			<a href="#" class="active">Home</a> <a href="MyLearning.jsp">My
+			<a href="#" class="active">Home</a> <a href="<%=pageContext.getServletContext().getContextPath()%>/enrollment">My
 				Learning</a> <a href="Explore.jsp">Explore</a> <a href="Development.jsp">Development</a>
 			<a href="It.jsp">IT & Software</a> <a href="Devops.jsp">DevOps &
 				Cloud Computing</a>

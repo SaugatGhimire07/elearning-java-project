@@ -17,10 +17,17 @@
 				<span class="Instructor">Instructor:</span> <span class="Inst-name">${course.instructorName}</span>
 			</div>
 
-
 			<p class="Price">$ ${course.price} | Full Lifetime Access</p>
-			<button class="Enroll">Enroll Now</button>
-			<img class="shape" src="${pageContext.request.contextPath}/Views/Images/Shape.png" />
+
+			<form action="${pageContext.request.contextPath}/enrollment"
+				method="post">
+				<input type="hidden" name="courseId" value="${course.courseId}" />
+				<input type="hidden" name="studentId" value="${student.id}" />
+				<button type="submit" class="Enroll">Enroll Now</button>
+			</form>
+			
+			<img class="shape"
+				src="${pageContext.request.contextPath}/Views/Images/Shape.png" />
 		</div>
 		<div class="lower-banner">
 			<div class="lower-banner-item">
@@ -28,7 +35,7 @@
 				<p>Get in-depth knowledge of a subject</p>
 			</div>
 			<div class="lower-banner-item">
-				<h3>${course.experienceLevel} Level</h3>
+				<h3>${course.experienceLevel}Level</h3>
 				<p>No prior experience required</p>
 			</div>
 			<div class="lower-banner-item">
