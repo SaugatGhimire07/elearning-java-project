@@ -17,7 +17,7 @@ public class LessonDao {
 
 	// CREATE - Add a new lesson
 	public boolean addLesson(Lesson lesson) {
-		String sql = "INSERT INTO Lessons (course_id, lesson_title, content, video_url) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO Lesson (course_id, lesson_title, content, video_url) VALUES (?, ?, ?, ?)";
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setInt(1, lesson.getCourseId());
 			statement.setString(2, lesson.getLessonTitle());
@@ -32,7 +32,7 @@ public class LessonDao {
 
 	// READ - Get a lesson by ID
 	public Lesson getLessonById(int lessonId) {
-		String sql = "SELECT * FROM Lessons WHERE lesson_id = ?";
+		String sql = "SELECT * FROM Lesson WHERE lesson_id = ?";
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setInt(1, lessonId);
 			ResultSet resultSet = statement.executeQuery();
@@ -48,7 +48,7 @@ public class LessonDao {
 	// READ - Get all lessons for a course
 	public List<Lesson> getLessonsByCourseId(int courseId) {
 		List<Lesson> lessons = new ArrayList<>();
-		String sql = "SELECT * FROM Lessons WHERE course_id = ?";
+		String sql = "SELECT * FROM Lesson WHERE course_id = ?";
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setInt(1, courseId);
 			ResultSet resultSet = statement.executeQuery();
@@ -67,7 +67,7 @@ public class LessonDao {
 			return false; // If lesson does not exist, return false
 		}
 
-		String sql = "UPDATE Lessons SET course_id = ?, lesson_title = ?, content = ?, video_url = ?, updated_at = CURRENT_TIMESTAMP WHERE lesson_id = ?";
+		String sql = "UPDATE Lesson SET course_id = ?, lesson_title = ?, content = ?, video_url = ?, updated_at = CURRENT_TIMESTAMP WHERE lesson_id = ?";
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setInt(1, lesson.getCourseId());
 			statement.setString(2, lesson.getLessonTitle());
@@ -85,7 +85,7 @@ public class LessonDao {
 
 	// Helper method to check if the lesson exists
 	private boolean lessonExists(int lessonId, int courseId) {
-		String checkSql = "SELECT COUNT(*) FROM Lessons WHERE lesson_id = ? AND course_id = ?";
+		String checkSql = "SELECT COUNT(*) FROM Lesson WHERE lesson_id = ? AND course_id = ?";
 		try (PreparedStatement statement = connection.prepareStatement(checkSql)) {
 			statement.setInt(1, lessonId);
 			statement.setInt(2, courseId);
@@ -102,7 +102,7 @@ public class LessonDao {
 
 	// DELETE - Delete a lesson
 	public boolean deleteLesson(int lessonId) {
-		String sql = "DELETE FROM Lessons WHERE lesson_id = ?";
+		String sql = "DELETE FROM Lesson WHERE lesson_id = ?";
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setInt(1, lessonId);
 			return statement.executeUpdate() > 0;
