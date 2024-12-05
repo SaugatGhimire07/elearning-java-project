@@ -56,10 +56,9 @@
 
 				<!-- Message if user is not logged in -->
 				<c:if test="${empty allEnrollments}">
-					<p>Please log in to see your last enrollments.</p>
+					<p>No enrollments found! Please login or enroll into the course..</p>
 				</c:if>
 			</div>
-
 		</div>
 	</div>
 

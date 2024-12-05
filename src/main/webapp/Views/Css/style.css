@@ -26,8 +26,8 @@ body {
 }
 
 .top-banner {
-  position: relative; /* For positioning child elements */
-  z-index: 1; /* Ensures the content stays above the shape */
+  position: relative;
+  z-index: 1;
 }
 
 .banner-heading {

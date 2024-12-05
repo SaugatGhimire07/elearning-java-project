@@ -1,6 +1,8 @@
 package net.elearning.servlet;
 
+import net.elearning.dao.CategoryDao;
 import net.elearning.dao.CourseDao;
+import net.elearning.model.Category;
 import net.elearning.model.Course;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -55,6 +57,9 @@ public class CourseServlet extends HttpServlet {
 
 			String action = request.getParameter("action");
 
+			CategoryDao categoryDao = new CategoryDao();
+			List<Category> categories = categoryDao.getAllCategories();
+			request.setAttribute("categories", categories);
 			if ("create".equals(action)) {
 				// Forward to the page where the user can create a new course
 				request.getRequestDispatcher("/Views/Course/createCourse.jsp").forward(request, response);
@@ -143,6 +148,7 @@ public class CourseServlet extends HttpServlet {
 		}
 	}
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// Handle multipart form data (file upload)
@@ -151,6 +157,9 @@ public class CourseServlet extends HttpServlet {
 		String learningOutcome = request.getParameter("learningOutcome");
 		String experienceLevel = request.getParameter("experienceLevel");
 		double price = Double.parseDouble(request.getParameter("price"));
+
+		// Get the categoryId from the form
+		int categoryId = Integer.parseInt(request.getParameter("categoryId"));
 
 		// Get the instructorId from session (assuming the user is logged in)
 		Integer instructorId = (Integer) request.getSession().getAttribute("userId");
@@ -200,6 +209,7 @@ public class CourseServlet extends HttpServlet {
 			course.setLearningOutcome(learningOutcome);
 			course.setExperienceLevel(experienceLevel);
 			course.setPrice(price);
+			course.setCategoryId(categoryId); // Update category
 
 			// Set new cover image URL
 			if (coverImageUrl != null) {
@@ -225,11 +235,12 @@ public class CourseServlet extends HttpServlet {
 			course.setPrice(price);
 			course.setCoverImageUrl(coverImageUrl); // Set the uploaded image path
 			course.setInstructorId(instructorId);
+			course.setCategoryId(categoryId); // Set category when creating a new course
 
 			// Insert the new course into the database
 			int generatedCourseId = courseDao.insertCourse(course);
 			if (generatedCourseId != -1) {
-				response.sendRedirect(request.getContextPath() + "/course");
+				response.sendRedirect(request.getContextPath() + "/course?action=listCourses");
 			} else {
 				request.setAttribute("errorMessage", "Failed to create the course. Please try again.");
 				request.getRequestDispatcher("/Views/Course/createCourse.jsp").forward(request, response);

@@ -42,13 +42,14 @@
 
         <!-- Button to create new lesson -->
         <a href="lesson?action=create&courseId=<%= request.getParameter("courseId") %>" class="btn btn-primary mb-3">Create New Lesson</a>
+        <a href="<%=request.getContextPath()%>/course" class="btn btn-secondary mb-3">Cancel</a>
         
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Lesson Title</th>
                     <th>Content</th>
-                    <th>Video URL</th>
+                    <th>Video URL Code</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -80,6 +81,7 @@
             </tbody>
         </table>
     </div>
+    
 
     <script>
         function deleteLesson(lessonId) {

@@ -62,9 +62,7 @@
 		<a href="<%=pageContext.getServletContext().getContextPath()%>/index">Home</a>
 		<a
 			href="<%=pageContext.getServletContext().getContextPath()%>/myLearning">My
-			Learning</a> <a href="Explore.jsp">Explore</a> <a href="Development.jsp">Development</a>
-		<a href="It.jsp">IT & Software</a> <a href="Devops.jsp">DevOps &
-			Cloud Computing</a>
+			Learning</a> <a href="<%=pageContext.getServletContext().getContextPath()%>/explore">Explore</a> 
 	</div>
 </div>
 

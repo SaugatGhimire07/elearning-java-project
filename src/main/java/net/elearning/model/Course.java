@@ -3,141 +3,151 @@ package net.elearning.model;
 import java.sql.Timestamp;
 
 public class Course {
-    private int courseId;
-    private String courseTitle;
-    private String description;
-    private String learningOutcome;
-    private String experienceLevel;
-    private double price;
-    private String coverImageUrl;
-    private int instructorId;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
-    
-    private String instructorName;
+	private int courseId;
+	private String courseTitle;
+	private String description;
+	private String learningOutcome;
+	private String experienceLevel;
+	private double price;
+	private String coverImageUrl;
+	private int instructorId;
+	private Timestamp createdAt;
+	private Timestamp updatedAt;
 
-    // Constructor
-    public Course() {
-    }
-    
+	private String instructorName;
+	private int categoryId;
+	private String categoryName;
 
-    public Course(int courseId, String courseTitle, String description, String learningOutcome,
-                  String experienceLevel, double price, String coverImageUrl, int instructorId,
-                  Timestamp createdAt, Timestamp updatedAt) {
-        this.courseId = courseId;
-        this.courseTitle = courseTitle;
-        this.description = description;
-        this.learningOutcome = learningOutcome;
-        this.experienceLevel = experienceLevel;
-        this.price = price;
-        this.coverImageUrl = coverImageUrl;
-        this.instructorId = instructorId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-    
-    public String getInstructorName() {
-        return instructorName;
-    }
+	// Constructor
+	public Course() {
+	}
 
-    public void setInstructorName(String instructorName) {
-        this.instructorName = instructorName;
-    }
+	public Course(int courseId, String courseTitle, String description, String learningOutcome, String experienceLevel,
+			double price, String coverImageUrl, int instructorId, Timestamp createdAt, Timestamp updatedAt) {
+		this.courseId = courseId;
+		this.courseTitle = courseTitle;
+		this.description = description;
+		this.learningOutcome = learningOutcome;
+		this.experienceLevel = experienceLevel;
+		this.price = price;
+		this.coverImageUrl = coverImageUrl;
+		this.instructorId = instructorId;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
 
-    // Getters and Setters
-    public int getCourseId() {
-        return courseId;
-    }
+	// Getters and Setters for categoryId and categoryName
+	public int getCategoryId() {
+		return categoryId;
+	}
 
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
+	}
 
-    public String getCourseTitle() {
-        return courseTitle;
-    }
+	public String getCategoryName() {
+		return categoryName;
+	}
 
-    public void setCourseTitle(String courseTitle) {
-        this.courseTitle = courseTitle;
-    }
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getInstructorName() {
+		return instructorName;
+	}
 
-    public void setDescription(String description) {
-        this.description = description != null ? description.trim() : null;
-    }
+	public void setInstructorName(String instructorName) {
+		this.instructorName = instructorName;
+	}
 
-    public String getLearningOutcome() {
-        return learningOutcome;
-    }
+	// Existing Getters and Setters
+	public int getCourseId() {
+		return courseId;
+	}
 
-    public void setLearningOutcome(String learningOutcome) {
-        this.learningOutcome = learningOutcome != null ? learningOutcome.trim() : null;
-    }
+	public void setCourseId(int courseId) {
+		this.courseId = courseId;
+	}
 
-    public String getExperienceLevel() {
-        return experienceLevel;
-    }
+	public String getCourseTitle() {
+		return courseTitle;
+	}
 
-    public void setExperienceLevel(String experienceLevel) {
-        this.experienceLevel = experienceLevel;
-    }
+	public void setCourseTitle(String courseTitle) {
+		this.courseTitle = courseTitle;
+	}
 
-    public double getPrice() {
-        return price;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+	public void setDescription(String description) {
+		this.description = description != null ? description.trim() : null;
+	}
 
-    public String getCoverImageUrl() {
-        return coverImageUrl;
-    }
+	public String getLearningOutcome() {
+		return learningOutcome;
+	}
 
-    public void setCoverImageUrl(String coverImageUrl) {
-        this.coverImageUrl = coverImageUrl;
-    }
+	public void setLearningOutcome(String learningOutcome) {
+		this.learningOutcome = learningOutcome != null ? learningOutcome.trim() : null;
+	}
 
-    public int getInstructorId() {
-        return instructorId;
-    }
+	public String getExperienceLevel() {
+		return experienceLevel;
+	}
 
-    public void setInstructorId(int instructorId) {
-        this.instructorId = instructorId;
-    }
+	public void setExperienceLevel(String experienceLevel) {
+		this.experienceLevel = experienceLevel;
+	}
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
+	public double getPrice() {
+		return price;
+	}
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
+	public void setPrice(double price) {
+		this.price = price;
+	}
 
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
+	public String getCoverImageUrl() {
+		return coverImageUrl;
+	}
 
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+	public void setCoverImageUrl(String coverImageUrl) {
+		this.coverImageUrl = coverImageUrl;
+	}
 
-    @Override
-    public String toString() {
-        return "Course{" +
-                "courseId=" + courseId +
-                ", courseTitle='" + courseTitle + '\'' +
-                ", description='" + description + '\'' +
-                ", learningOutcome='" + learningOutcome + '\'' +
-                ", experienceLevel='" + experienceLevel + '\'' +
-                ", price=" + price +
-                ", coverImageUrl='" + coverImageUrl + '\'' +
-                ", instructorId=" + instructorId +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
+	public int getInstructorId() {
+		return instructorId;
+	}
+
+	public void setInstructorId(int instructorId) {
+		this.instructorId = instructorId;
+	}
+
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	@Override
+	public String toString() {
+		return "Course{" + "courseId=" + courseId + ", courseTitle='" + courseTitle + '\'' + ", description='"
+				+ description + '\'' + ", learningOutcome='" + learningOutcome + '\'' + ", experienceLevel='"
+				+ experienceLevel + '\'' + ", price=" + price + ", coverImageUrl='" + coverImageUrl + '\''
+				+ ", instructorId=" + instructorId + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
+				+ ", categoryId=" + categoryId + ", categoryName='" + categoryName + '\'' + '}';
+	}
 }

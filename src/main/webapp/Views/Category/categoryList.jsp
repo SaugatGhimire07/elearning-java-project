@@ -1,19 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"
-	import="java.util.List, net.elearning.model.Course"%>
+	import="java.util.List, net.elearning.model.Category"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Course List</title>
+<title>Category List</title>
 
 <!-- Bootstrap CSS from CDN -->
 <link
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	rel="stylesheet">
+
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/Views/Css/sidenav.css" />
-	
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/Views/Css/util.css" />
 
@@ -37,11 +37,7 @@ table {
 table td {
 	padding: 15px;
 }
-
-td:nth-child(2), th:nth-child(2) {
-	width: 30%;
-}
-
+/* Optional: Make buttons more rounded */
 .btn {
 	border-radius: 5px;
 }
@@ -87,43 +83,36 @@ td:nth-child(2), th:nth-child(2) {
 			</div>
 		</div>
 	</div>
-	<div class="container mt-5">
-		<h1 class="mb-4">Course List</h1>
 
-		<!-- Button to create new course -->
-		<a href="course?action=create" class="btn btn-primary mb-3">Create
-			New Course</a>
+
+
+	<div class="container mt-5">
+		<h1 class="mb-4">Category List</h1>
+
+		<!-- Button to create a new category -->
+		<a href="category?action=create" class="btn btn-primary mb-3">Create
+			New Category</a>
 
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th>Course Title</th>
-					<th>Description</th>
-					<th>Learning Outcome</th>
-					<th>Experience Level</th>
-					<th>Price</th>
+					<th>Category Name</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				<%
-				List<Course> courses = (List<Course>) request.getAttribute("courses");
-				if (courses != null) {
-					for (Course course : courses) {
+				List<Category> categories = (List<Category>) request.getAttribute("categories");
+				if (categories != null) {
+					for (Category category : categories) {
 				%>
 				<tr>
-					<td><%=course.getCourseTitle()%></td>
-					<td><%=course.getDescription()%></td>
-					<td><%=course.getLearningOutcome()%></td>
-					<td><%=course.getExperienceLevel()%></td>
-					<td><%=course.getPrice()%></td>
+					<td><%=category.getCategoryName()%></td>
 					<td><a
-						href="<%=request.getContextPath()%>/lesson?courseId=<%=course.getCourseId()%>"
-						class="btn btn-info btn-sm">Add Lesson</a> <a
-						href="<%=request.getContextPath()%>/course?action=edit&courseId=<%=course.getCourseId()%>"
+						href="<%=request.getContextPath()%>/category?action=edit&categoryId=<%=category.getCategoryId()%>"
 						class="btn btn-warning btn-sm">Edit</a> <a
 						href="javascript:void(0);"
-						onclick="deleteCourse(<%=course.getCourseId()%>)"
+						onclick="deleteCategory(<%=category.getCategoryId()%>)"
 						class="btn btn-danger btn-sm">Delete</a></td>
 				</tr>
 				<%
@@ -131,7 +120,7 @@ td:nth-child(2), th:nth-child(2) {
 				} else {
 				%>
 				<tr>
-					<td colspan="6">No courses available.</td>
+					<td colspan="2">No categories available.</td>
 				</tr>
 				<%
 				}
@@ -139,32 +128,6 @@ td:nth-child(2), th:nth-child(2) {
 			</tbody>
 		</table>
 	</div>
-
-	<script>
-	    function deleteCourse(courseId) {
-	        if (confirm('Are you sure you want to delete this course?')) {
-	            fetch('course', {
-	                method: 'DELETE',
-	                headers: {
-	                    'Content-Type': 'application/json',
-	                },
-	                body: JSON.stringify({ courseId: courseId })
-	            })
-	            .then(response => {
-	                if (response.ok) {
-	                    alert('Course deleted successfully');
-	                    window.location.reload();
-	                } else {
-	                    return response.text().then(text => { throw new Error(text); });
-	                }
-	            })
-	            .catch(error => {
-	                console.error('Error deleting course:', error.message);
-	                alert('Error deleting course: ' + error.message);
-	            });
-	        }
-	    }
-    </script>
 
 	<script>
     function deleteCategory(categoryId) {

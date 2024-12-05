@@ -44,6 +44,18 @@
                     <option value="Advanced" ${course.experienceLevel == 'Advanced' ? 'selected' : ''}>Advanced</option>
                 </select>
             </div>
+            
+            <div class="form-group">
+                <label for="categoryId">Category:</label>
+                <select class="form-control" id="categoryId" name="categoryId" required>
+                    <c:forEach var="category" items="${categories}">
+                        <option value="${category.categoryId}" 
+                            ${category.categoryId == course.categoryId ? 'selected' : ''}>
+                            ${category.categoryName}
+                        </option>
+                    </c:forEach>
+                </select>
+            </div>
 
             <div class="form-group">
                 <label for="price">Price:</label>
@@ -66,6 +78,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Update Course</button>
+            <a href="<%=request.getContextPath()%>/course" class="btn btn-secondary ml-2">Cancel</a>
         </form>
     </div>
 

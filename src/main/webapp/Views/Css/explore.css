@@ -1,0 +1,119 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f7f3;
+}
+
+.courses {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Creates two equal columns */
+    gap: 20px; /* Space between items */
+}
+
+.similar-courses {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: "Inter", sans-serif;
+    color: #000;
+}
+
+.course-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.course-header h2 {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 27px;
+    letter-spacing: 3%;
+}
+
+.course-item {
+    background-color: #1E1E1E; /* Dark background for each category */
+    color: white; /* Text color for contrast */
+    border: 1px solid #ddd;
+    padding: 60px;
+    border-radius: 8px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+}
+
+.course-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.course-item h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    text-align:center;
+}
+
+.courses-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.course {
+    background-color: #fff;
+    width: 268px;
+    height: 326px;
+    border: 1px solid #ddd;
+    border-radius: 8px 8px 0 0;
+}
+
+.course:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.course-image {
+    width: 268px;
+    height: 202px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 15px;
+}
+
+.sub_container {
+    margin-left: 1rem;
+}
+
+.course-title {
+    font-family: Inter;
+    font-weight: 700;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.course-instructor {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.course-price {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #000;
+}
+
+.course-link {
+    text-decoration: none; /* Removes the underline from the link */
+    color: inherit; /* Inherits the text color of the parent element */
+}
