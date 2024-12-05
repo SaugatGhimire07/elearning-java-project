@@ -27,7 +27,7 @@
 
             <div class="form-group">
                 <label for="videoUrl">Video URL:</label>
-                <input type="url" class="form-control" id="videoUrl" name="videoUrl" required>
+                <input type="text" class="form-control" id="videoUrl" name="videoUrl" required>
             </div>
 
             <button type="submit" class="btn btn-primary">Create Lesson</button>

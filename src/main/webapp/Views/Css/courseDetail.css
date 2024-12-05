@@ -9,11 +9,13 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #fdfdfd;
+    background-color: #f8f7f3;
+}
+
+.course-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
 }
 
 /* Banner Section */
@@ -22,7 +24,7 @@ body {
     border-radius: 20px;
     width: 1160px;
     height: 439px;
-    margin-top: 150px;
+    margin-top: 44px;
     padding: 30px;
     padding-left: 80px;
     border: black solid 3px;
@@ -42,7 +44,6 @@ body {
     line-height: 45.49px;
     letter-spacing: 3%;
     color: white;
-    width: 476.28px;
     height: 45px;
     top: 257px;
     left: 215px;
@@ -202,7 +203,8 @@ li{
     padding: 10px;
     font-family: 'Inter', sans-serif; /* Ensure consistent font */
     color: #000; /* Text color */
-    line-height: 1.6; /* Line height for readability */
+    line-height: 1.6;
+    margin-bottom: 50px;
 }
 
 .learn-heading {
@@ -238,8 +240,7 @@ li{
     size: 16px;
     line-height: 40px;
     letter-spacing: 3%;
-    position: relative; /* For custom bullet positioning */
-    padding-left: 25px; /* Add space for the bullet */
+    position: relative;
 }
 
 

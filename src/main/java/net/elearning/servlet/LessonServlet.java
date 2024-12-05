@@ -57,7 +57,7 @@ public class LessonServlet extends HttpServlet {
 						int lessonId = Integer.parseInt(lessonIdParam);
 						// Fetch the lesson details for editing
 						try (Connection connection = DatabaseConnection.getConnection()) {
-							LessonDao lessonDao = new LessonDao(connection);
+							LessonDao lessonDao = new LessonDao();
 							Lesson lesson = lessonDao.getLessonById(lessonId); // Get the lesson object by ID
 							if (lesson != null) {
 								// Set the lesson object as a request attribute to be accessed in the JSP
@@ -81,7 +81,7 @@ public class LessonServlet extends HttpServlet {
 			if (courseIdParam != null) {
 				int courseId = Integer.parseInt(courseIdParam);
 				try (Connection connection = DatabaseConnection.getConnection()) {
-					LessonDao lessonDao = new LessonDao(connection);
+					LessonDao lessonDao = new LessonDao();
 					List<Lesson> lessons = lessonDao.getLessonsByCourseId(courseId);
 
 					// Set the lessons and courseId in the request to forward to the lesson list
@@ -143,7 +143,7 @@ public class LessonServlet extends HttpServlet {
 
 		// Insert the lesson into the database using LessonDao
 		try (Connection connection = DatabaseConnection.getConnection()) {
-			LessonDao lessonDao = new LessonDao(connection);
+			LessonDao lessonDao = new LessonDao();
 			boolean isAdded = lessonDao.addLesson(newLesson);
 
 			// Check if the lesson insertion was successful
@@ -165,7 +165,7 @@ public class LessonServlet extends HttpServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try (Connection connection = DatabaseConnection.getConnection()) {
-			LessonDao lessonDao = new LessonDao(connection);
+			LessonDao lessonDao = new LessonDao();
 			String lessonIdParam = request.getParameter("lessonId");
 			String courseIdParam = request.getParameter("courseId");
 			String lessonTitle = request.getParameter("lessonTitle");
@@ -220,7 +220,7 @@ public class LessonServlet extends HttpServlet {
 
 		if (lessonIdParam != null) {
 			try (Connection connection = DatabaseConnection.getConnection()) {
-				LessonDao lessonDao = new LessonDao(connection);
+				LessonDao lessonDao = new LessonDao();
 				int lessonId = Integer.parseInt(lessonIdParam);
 				boolean isDeleted = lessonDao.deleteLesson(lessonId);
 				if (isDeleted) {

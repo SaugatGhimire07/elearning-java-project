@@ -13,10 +13,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/Views/Css/style.css" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/Views/Css/util.css" />
 </head>
 <body>
-	<%@ include file="header.jsp" %>
-	
+	<%@ include file="header.jsp"%>
+
 	<div class="banner">
 		<div class="contianer">
 			<div class="landing-banner">
@@ -33,6 +35,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="cont-learning">
 		<div class="similar-courses">
 			<div class="course-header">
@@ -40,38 +43,37 @@
 				<a href="#" class="see-all">See all &gt;&gt;</a>
 			</div>
 			<div class="courses">
-				<div class="courses-list ">
-					<div class="pending">
-						<img
-							src="${pageContext.request.contextPath}/Views/Images/react.png"
-							alt="React Basics" class="course-image">
-						<div class="sub_container">
-							<br>
-							<p class="course-instructor">Courses | Saugat Ghimire</p>
-							<h3 class="course-title">React Basics: The Complete Bootcamp</h3>
-							<div class="progress-bar">
-								<div class="progress" style="width: 20%;"></div>
-							</div>
-							<p>20% Overall Progress</p>
+				<!-- Last two enrollments section -->
+				<c:if test="${not empty lastTwoEnrollments}">
+					<c:forEach var="enrollment" items="${lastTwoEnrollments}">
+						<div class="courses-list">
+							<a
+								href="${pageContext.request.contextPath}/lessonplayer?courseId=${enrollment.courseId}"
+								class="course-link">
+
+								<div class="pending">
+									<img
+										src="${pageContext.request.contextPath}${enrollment.coverImageUrl}"
+										alt="${enrollment.courseTitle}" class="course-image">
+									<div class="sub_container">
+										<br>
+										<p class="course-instructor">Courses |
+											${enrollment.instructorName}</p>
+										<h3 class="course-title">${enrollment.courseTitle}</h3>
+										<div class="progress-bar">
+											<p>Go to Lessons</p>
+										</div>
+									</div>
+								</div>
+							</a>
 						</div>
-					</div>
-				</div>
-				<div class="courses-list " style="margin-left: 25px;">
-					<div class=" pending">
-						<img
-							src="${pageContext.request.contextPath}/Views/Images/prompt.png"
-							alt="React Basics" class="course-image">
-						<div class="sub_container">
-							<br>
-							<p class="course-instructor">Courses | Rupesh Karki</p>
-							<h3 class="course-title">Prompt Engineering</h3>
-							<div class="progress-bar">
-								<div class="progress" style="width: 20%;"></div>
-							</div>
-							<p>20% Overall Progress</p>
-						</div>
-					</div>
-				</div>
+					</c:forEach>
+				</c:if>
+
+				<!-- Message if user is not logged in -->
+				<c:if test="${empty lastTwoEnrollments}">
+					<p>Please log in to see your last enrollments.</p>
+				</c:if>
 			</div>
 		</div>
 	</div>
@@ -97,8 +99,8 @@
 			</c:forEach>
 		</div>
 	</div>
-	
-	<%@ include file="footer.jsp" %>
+
+	<%@ include file="footer.jsp"%>
 
 </body>
 </html>

@@ -10,9 +10,8 @@ public class LessonDao {
 
 	private Connection connection;
 
-	// Constructor to initialize the connection
-	public LessonDao(Connection connection) {
-		this.connection = connection;
+	public LessonDao() throws SQLException {
+		this.connection = DatabaseConnection.getConnection();
 	}
 
 	// CREATE - Add a new lesson
@@ -98,6 +97,37 @@ public class LessonDao {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public List<Lesson> getLessonsForUserAndCourse(int studentId, int courseId) throws SQLException {
+		List<Lesson> lessons = new ArrayList<>();
+
+		String query = "SELECT l.lesson_id, l.lesson_title, l.content, l.video_url, "
+				+ "c.course_title, c.description, u.full_name AS instructorName " + "FROM Enrollment e "
+				+ "JOIN Course c ON e.course_id = c.course_id " + "JOIN Lessons l ON c.course_id = l.course_id "
+				+ "JOIN User u ON c.instructor_id = u.user_id " + "WHERE e.student_id = ? AND c.course_id = ?";
+
+		try (PreparedStatement statement = connection.prepareStatement(query)) {
+			statement.setInt(1, studentId);
+			statement.setInt(2, courseId);
+
+			try (ResultSet resultSet = statement.executeQuery()) {
+				while (resultSet.next()) {
+					Lesson lesson = new Lesson();
+					lesson.setLessonId(resultSet.getInt("lesson_id"));
+					lesson.setLessonTitle(resultSet.getString("lesson_title"));
+					lesson.setContent(resultSet.getString("content"));
+					lesson.setVideoUrl(resultSet.getString("video_url"));
+					lesson.setCourseTitle(resultSet.getString("course_title"));
+					lesson.setDescription(resultSet.getString("description"));
+					lesson.setInstructorName(resultSet.getString("instructorName"));
+
+					lessons.add(lesson);
+				}
+			}
+		}
+
+		return lessons;
 	}
 
 	// DELETE - Delete a lesson

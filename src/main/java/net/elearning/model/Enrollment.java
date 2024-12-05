@@ -8,7 +8,9 @@ public class Enrollment {
     private int studentId;
     private Timestamp enrollmentDate;
     private String enrollmentStatus;
-
+    private String courseTitle;
+    private String coverImageUrl;
+    private String instructorName;
     // Default Constructor
     public Enrollment() {
     }
@@ -62,8 +64,33 @@ public class Enrollment {
     public void setEnrollmentStatus(String enrollmentStatus) {
         this.enrollmentStatus = enrollmentStatus;
     }
+    
+    public String getCourseTitle() {
+        return courseTitle;
+    }
 
-    @Override
+    public void setCourseTitle(String courseTitle) {
+        this.courseTitle = courseTitle;
+    }
+    
+
+    public String getCoverImageUrl() {
+		return coverImageUrl;
+	}
+
+	public void setCoverImageUrl(String coverImageUrl) {
+		this.coverImageUrl = coverImageUrl;
+	}
+
+	public String getInstructorName() {
+		return instructorName;
+	}
+
+	public void setInstructorName(String instructorName) {
+		this.instructorName = instructorName;
+	}
+
+	@Override
     public String toString() {
         return "Enrollment{" +
                 "enrollmentId=" + enrollmentId +

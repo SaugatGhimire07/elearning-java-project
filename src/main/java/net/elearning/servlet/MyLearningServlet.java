@@ -15,39 +15,43 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/index")
-public class IndexServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-
-    public IndexServlet() {
+/**
+ * Servlet implementation class MyLearningServlet
+ */
+@WebServlet("/myLearning")
+public class MyLearningServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public MyLearningServlet() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Get the userId from the session (check if logged in)
         HttpSession session = request.getSession();
         Integer userId = (Integer) session.getAttribute("userId");
 
         try {
-            // Fetch the last 4 courses using CourseDao
-            CourseDao courseDao = new CourseDao();
-            List<Course> lastFourCourses = courseDao.getLastFourCourses();
-
             // Initialize a list for last two enrollments (null if not logged in)
-            List<Enrollment> lastTwoEnrollments = null;
+            List<Enrollment> allEnrollments = null;
 
             // If user is logged in, fetch the last 2 enrollments
             if (userId != null) {
                 EnrollmentDao enrollmentDao = new EnrollmentDao();
-                lastTwoEnrollments = enrollmentDao.getLastTwoEnrollmentsWithCourseName(userId);
+                allEnrollments = enrollmentDao.getAllEnrollmentsWithCourseName(userId);
             }
 
-            // Set the courses and optionally the last two enrollments as request attributes
-            request.setAttribute("lastFourCourses", lastFourCourses);
-            request.setAttribute("lastTwoEnrollments", lastTwoEnrollments);
+            request.setAttribute("allEnrollments", allEnrollments);
 
             // Forward to the index.jsp page to display the data
-            request.getRequestDispatcher("/Views/Frontend/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/Views/Frontend/myLearning.jsp").forward(request, response);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -56,4 +60,5 @@ public class IndexServlet extends HttpServlet {
             request.getRequestDispatcher("/Views/Error/error.jsp").forward(request, response);
         }
     }
+
 }

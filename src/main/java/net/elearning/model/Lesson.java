@@ -10,6 +10,9 @@ public class Lesson {
     private String videoUrl;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    private String courseTitle;
+    private String description;
+    private String instructorName;
     
     // Constructor
     public Lesson() {
@@ -83,7 +86,31 @@ public class Lesson {
         this.updatedAt = updatedAt;
     }
 
-    @Override
+    public String getCourseTitle() {
+		return courseTitle;
+	}
+
+	public void setCourseTitle(String courseTitle) {
+		this.courseTitle = courseTitle;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getInstructorName() {
+		return instructorName;
+	}
+
+	public void setInstructorName(String instructorName) {
+		this.instructorName = instructorName;
+	}
+
+	@Override
     public String toString() {
         return "Lesson{" +
                 "lessonId=" + lessonId +

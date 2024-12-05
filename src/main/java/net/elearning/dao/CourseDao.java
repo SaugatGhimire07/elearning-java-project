@@ -43,21 +43,27 @@ public class CourseDao {
 
 	// Select a course by ID
 	public Course getCourseById(int courseId) {
-		String query = "SELECT * FROM Course WHERE course_id = ?";
-		try (Connection connection = DatabaseConnection.getConnection();
-				PreparedStatement stmt = connection.prepareStatement(query)) {
-			stmt.setInt(1, courseId);
+	    String query = "SELECT c.*, u.full_name AS instructor_name " +
+	                   "FROM Course c " +
+	                   "JOIN User u ON c.instructor_id = u.user_id " +
+	                   "WHERE c.course_id = ?";
+	    try (Connection connection = DatabaseConnection.getConnection();
+	         PreparedStatement stmt = connection.prepareStatement(query)) {
+	        stmt.setInt(1, courseId);
 
-			try (ResultSet rs = stmt.executeQuery()) {
-				if (rs.next()) {
-					return mapRowToCourse(rs);
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null; // Return null if the course is not found
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            if (rs.next()) {
+	                Course course = mapRowToCourse(rs);
+	                course.setInstructorName(rs.getString("instructor_name")); // Set the instructor name
+	                return course;
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null; // Return null if the course is not found
 	}
+
 
 	public List<Course> getAllCourses() {
 		List<Course> courses = new ArrayList<>();
