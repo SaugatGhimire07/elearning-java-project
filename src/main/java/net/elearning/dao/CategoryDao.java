@@ -35,23 +35,25 @@ public class CategoryDao {
 		return -1; // Return -1 if insertion fails
 	}
 
-	// Select a category by ID
 	public Category getCategoryById(int categoryId) {
-		String query = "SELECT * FROM Category WHERE category_id = ?";
-		try (Connection connection = DatabaseConnection.getConnection();
-				PreparedStatement stmt = connection.prepareStatement(query)) {
-			stmt.setInt(1, categoryId);
-
-			try (ResultSet rs = stmt.executeQuery()) {
-				if (rs.next()) {
-					return mapRowToCategory(rs);
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null; // Return null if the category is not found
+	    Category category = null;
+	    String query = "SELECT * FROM Category WHERE category_id = ?";
+	    try (Connection connection = DatabaseConnection.getConnection();
+	         PreparedStatement stmt = connection.prepareStatement(query)) {
+	        stmt.setInt(1, categoryId);
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            if (rs.next()) {
+	                category = new Category();
+	                category.setCategoryId(rs.getInt("category_id"));
+	                category.setCategoryName(rs.getString("category_name"));
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return category;
 	}
+
 
 	public List<Category> getAllCategories() {
 	    List<Category> categories = new ArrayList<>();

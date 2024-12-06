@@ -40,7 +40,9 @@
 		<div class="similar-courses">
 			<div class="course-header">
 				<h2 style="width: auto;">Let's Continue Learning</h2>
-				<a href="#" class="see-all">See all &gt;&gt;</a>
+				<a
+					href="<%=pageContext.getServletContext().getContextPath()%>/myLearning"
+					class="see-all">See all &gt;&gt;</a>
 			</div>
 			<div class="courses">
 				<!-- Last two enrollments section -->
@@ -72,7 +74,8 @@
 
 				<!-- Message if user is not logged in -->
 				<c:if test="${empty lastTwoEnrollments}">
-					<p>No enrollments found! Please login or enroll into the course.</p>
+					<p>No enrollments found! Please login or enroll into the
+						course.</p>
 				</c:if>
 			</div>
 		</div>
@@ -80,8 +83,8 @@
 
 	<div class="similar-courses">
 		<div class="course-header">
-			<h2 style="width: auto;">Most Popular Certificate</h2>
-			<a href="#" class="see-all">See all &gt;&gt;</a>
+			<h2 style="width: auto;">Recently Added</h2>
+			<a href="${pageContext.request.contextPath}/allCourses" class="see-all">See all &gt;&gt;</a>
 		</div>
 		<div class="courses-list">
 			<c:forEach var="course" items="${lastFourCourses}">
@@ -101,6 +104,8 @@
 	</div>
 
 	<%@ include file="footer.jsp"%>
+	
+	
 
 </body>
 </html>

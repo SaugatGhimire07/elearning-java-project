@@ -64,8 +64,6 @@ public class EnrollmentDao {
 	    return enrollments;
 	}
 
-
-
 	public List<Enrollment> getAllEnrollmentsWithCourseName(int studentId) {
 	    List<Enrollment> enrollments = new ArrayList<>();
 	    String sql = "SELECT e.*, c.course_title, c.cover_image_url, u.full_name AS instructor_name " +

@@ -21,7 +21,7 @@
 
 	<div class="similar-courses">
 		<div class="course-header">
-			<h2 style="width: auto;">${categoryName}Courses</h2>
+			<h2 style="width: auto;">All Courses</h2>
 		</div>
 
 		<!-- Display error message if present -->
@@ -62,3 +62,4 @@
 
 </body>
 </html>
+s

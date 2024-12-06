@@ -28,7 +28,16 @@
 					method="post">
 					<input type="hidden" name="courseId" value="${course.courseId}" />
 					<input type="hidden" name="studentId" value="${student.id}" />
-					<button type="submit" class="Enroll">Enroll Now</button>
+					<c:if test="${isEnrolled}">
+						<!-- If the user is enrolled, show the link to the lesson player -->
+						<button type="button" class="Enroll"
+							onclick="window.location.href='${pageContext.request.contextPath}/lessonplayer?courseId=${course.courseId}'">
+							Go to Lessons</button>
+					</c:if>
+					<c:if test="${!isEnrolled}">
+						<!-- If the user is not enrolled, show the Enroll Now button -->
+						<button type="submit" class="Enroll">Enroll Now</button>
+					</c:if>
 				</form>
 
 				<img class="shape"
@@ -36,7 +45,7 @@
 			</div>
 			<div class="lower-banner">
 				<div class="lower-banner-item">
-					<h3>10 Lessons</h3>
+					<h3>${lessonCount}Lessons</h3>
 					<p>Get in-depth knowledge of a subject</p>
 				</div>
 				<div class="lower-banner-item">
@@ -51,28 +60,15 @@
 			<div class="learn-section">
 				<h2 class="learn-heading">What you'll learn</h2>
 				<div class="learn-content">
-					<ul class="learn-column">
-						<li>&#10003 Grasp the fundamentals of prompt engineering,
-							including the principles of effective prompt design and the role
-							of context in AI responses.</li>
-						<li>&#10003 Acquire skills to craft precise prompts that
-							enhance AI output quality, utilizing techniques for clarity and
-							specificity.</li>
-					</ul>
-					<ul class="learn-column">
-						<li>&#10003 Gain proficiency in analyzing and refining
-							prompts through iteration, understanding how to adapt prompts for
-							various AI models and applications.</li>
-						<li>&#10003 Get hands-on experience with real-world examples,
-							applying prompt engineering strategies to solve problems across
-							different domains.</li>
-					</ul>
+					<div class="learn-column">
+						<p>&#10003 ${course.learningOutcome}</p>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	<%@ include file="footer.jsp" %>
+
+	<%@ include file="footer.jsp"%>
 
 </body>
 </html>

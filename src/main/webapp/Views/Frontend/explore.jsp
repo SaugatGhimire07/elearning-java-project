@@ -8,16 +8,13 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title></title>
+<title>Explore Courses</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/Views/Css/explore.css" />
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/Views/Css/util.css" />
-<head>
-<meta charset="UTF-8">
-<title>Explore Courses</title>
 </head>
 <body>
 	<%@ include file="header.jsp"%>
@@ -31,7 +28,9 @@
                 <!-- Iterate through the categories and display each one -->
                 <c:forEach var="category" items="${categories}">
                     <div class="course-item">
-                        <h3>${category.categoryName}</h3>
+                        <a href="${pageContext.request.contextPath}/courseByCategory?categoryId=${category.categoryId}" class="category-link">
+                            <h3>${category.categoryName}</h3>
+                        </a>
                     </div>
                 </c:forEach>
             </div>

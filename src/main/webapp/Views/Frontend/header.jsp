@@ -38,8 +38,8 @@
 						<%
 						if (session.getAttribute("userId") != null) {
 						%>
-						<a href="#" class="dropdown-item">Profile</a>
-						<a href="#" class="dropdown-item" onclick="logout()">Logout</a>
+						<a href="#" class="dropdown-item">Profile</a> 
+						<a href="#" class="dropdown-item" id="myLink">Logout</a>
 						<%
 						} else {
 						%>
@@ -62,7 +62,10 @@
 		<a href="<%=pageContext.getServletContext().getContextPath()%>/index">Home</a>
 		<a
 			href="<%=pageContext.getServletContext().getContextPath()%>/myLearning">My
-			Learning</a> <a href="<%=pageContext.getServletContext().getContextPath()%>/explore">Explore</a> 
+			Learning</a> <a
+			href="<%=pageContext.getServletContext().getContextPath()%>/explore">Explore</a>
+		<a
+			href="<%=pageContext.getServletContext().getContextPath()%>/allCourses">All Courses</a>
 	</div>
 </div>
 
@@ -81,14 +84,18 @@
 </script>
 
 <script>
-    function logout() {
-        // Create a form to send a POST request to the LogoutServlet
-        var form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '<%=pageContext.getServletContext().getContextPath()%>/logout';
+  document.getElementById("myLink").onclick = function(event) {
+    event.preventDefault(); // Prevent default link behavior
 
-        // Submit the form
-        document.body.appendChild(form);
-        form.submit();
-    }
+    // Create a form element
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '<%=pageContext.getServletContext().getContextPath()%>/logout';
+
+    // Append the form to the body (required for submission)
+    document.body.appendChild(form);
+
+    // Submit the form
+    form.submit();
+  };
 </script>
