@@ -10,7 +10,9 @@ import net.elearning.dao.LessonDao;
 import net.elearning.model.Lesson;
 import net.elearning.dao.DatabaseConnection;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -107,133 +109,111 @@ public class LessonServlet extends HttpServlet {
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// Retrieve form parameters
-		String lessonTitle = request.getParameter("lessonTitle");
-		String content = request.getParameter("content");
-		String videoUrl = request.getParameter("videoUrl");
-		String courseIdParam = request.getParameter("courseId");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    // Handle both create and update logic
+	    String method = request.getParameter("_method");
+	    String lessonTitle = request.getParameter("lessonTitle");
+	    String content = request.getParameter("content");
+	    String videoUrl = request.getParameter("videoUrl");
+	    String courseIdParam = request.getParameter("courseId");
+	    String lessonIdParam = request.getParameter("lessonId");
 
-		// Get the instructorId from session (assuming the user is logged in)
-		Integer instructorId = (Integer) request.getSession().getAttribute("userId");
-		if (instructorId == null) {
-			// Handle case when instructorId is not available (user not logged in)
-			request.setAttribute("errorMessage", "Instructor ID is missing. Please log in.");
-			request.getRequestDispatcher("/Views/Lesson/createLesson.jsp").forward(request, response);
-			return;
-		}
+	    // Validate required fields
+	    if (lessonTitle == null || content == null || videoUrl == null || courseIdParam == null) {
+	        request.setAttribute("errorMessage", "All fields are required. Please fill out the form completely.");
+	        request.getRequestDispatcher("/Views/Lesson/createLesson.jsp").forward(request, response);
+	        return;
+	    }
 
-		// Validate the required fields
-		if (lessonTitle == null || content == null || videoUrl == null || courseIdParam == null) {
-			request.setAttribute("errorMessage", "All fields are required. Please fill out the form completely.");
-			request.getRequestDispatcher("/Views/Lesson/createLesson.jsp").forward(request, response);
-			return;
-		}
+	    // Parse courseId
+	    int courseId = Integer.parseInt(courseIdParam);
 
-		// Parse the courseId
-		int courseId = Integer.parseInt(courseIdParam);
+	    // Get the instructorId from session
+	    Integer instructorId = (Integer) request.getSession().getAttribute("userId");
+	    if (instructorId == null) {
+	        request.setAttribute("errorMessage", "Instructor ID is missing. Please log in.");
+	        request.getRequestDispatcher("/Views/Lesson/createLesson.jsp").forward(request, response);
+	        return;
+	    }
 
-		// Create a new Lesson object with the form data
-		Lesson newLesson = new Lesson();
-		newLesson.setLessonTitle(lessonTitle);
-		newLesson.setContent(content);
-		newLesson.setVideoUrl(videoUrl);
-		newLesson.setCourseId(courseId);
+	    // Create a Lesson object
+	    Lesson lesson = new Lesson();
+	    lesson.setLessonTitle(lessonTitle);
+	    lesson.setContent(content);
+	    lesson.setVideoUrl(videoUrl);
+	    lesson.setCourseId(courseId);
 
-		// Insert the lesson into the database using LessonDao
-		try (Connection connection = DatabaseConnection.getConnection()) {
-			LessonDao lessonDao = new LessonDao();
-			boolean isAdded = lessonDao.addLesson(newLesson);
+	    // Handle creation or update
+	    try (Connection connection = DatabaseConnection.getConnection()) {
+	        LessonDao lessonDao = new LessonDao();
 
-			// Check if the lesson insertion was successful
-			if (isAdded) {
-				// Redirect to the lesson list page for the course
-				String redirectUrl = request.getContextPath() + "/lesson?courseId=" + courseId;
-				response.sendRedirect(redirectUrl);
-			} else {
-				// Handle failure by redirecting back to createLesson.jsp with an error message
-				request.setAttribute("errorMessage", "Failed to create lesson. Please try again.");
-				request.getRequestDispatcher("/Views/Lesson/createLesson.jsp").forward(request, response);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error");
-		}
-	}
+	        if ("PUT".equalsIgnoreCase(method) && lessonIdParam != null) {
+	            // Update logic
+	            int lessonId = Integer.parseInt(lessonIdParam);
+	            lesson.setLessonId(lessonId);
+	            boolean isUpdated = lessonDao.updateLesson(lesson);
 
-	protected void doPut(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try (Connection connection = DatabaseConnection.getConnection()) {
-			LessonDao lessonDao = new LessonDao();
-			String lessonIdParam = request.getParameter("lessonId");
-			String courseIdParam = request.getParameter("courseId");
-			String lessonTitle = request.getParameter("lessonTitle");
-			String content = request.getParameter("content");
-			String videoUrl = request.getParameter("videoUrl");
+	            if (isUpdated) {
+	                response.sendRedirect(request.getContextPath() + "/lesson?courseId=" + courseId);
+	            } else {
+	                request.setAttribute("errorMessage", "Failed to update lesson. Please try again.");
+	                request.getRequestDispatcher("/Views/Lesson/editLesson.jsp").forward(request, response);
+	            }
+	        } else {
+	            // Create logic
+	            boolean isAdded = lessonDao.addLesson(lesson);
 
-			// Validate that all required parameters are provided
-			if (lessonIdParam != null && courseIdParam != null && lessonTitle != null && content != null
-					&& videoUrl != null) {
-				int lessonId = Integer.parseInt(lessonIdParam);
-				int courseId = Integer.parseInt(courseIdParam);
-
-				// Fetch the existing lesson to ensure it exists before updating
-				Lesson existingLesson = lessonDao.getLessonById(lessonId);
-				if (existingLesson != null && existingLesson.getCourseId() == courseId) {
-					// Update the lesson with new values
-					existingLesson.setLessonTitle(lessonTitle);
-					existingLesson.setContent(content);
-					existingLesson.setVideoUrl(videoUrl);
-
-					boolean isUpdated = lessonDao.updateLesson(existingLesson);
-					if (isUpdated) {
-						// Redirect to the lesson list page for the course
-						String redirectUrl = request.getContextPath() + "/lesson?courseId=" + courseId;
-						response.sendRedirect(redirectUrl);
-					} else {
-						response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-						response.getWriter().write("Failed to update the lesson. Please try again.");
-					}
-				} else {
-					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-					response.getWriter().write("Lesson not found or mismatch with courseId.");
-				}
-			} else {
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				response.getWriter().write("Missing required parameters");
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error");
-		} catch (NumberFormatException e) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().write("Invalid lessonId or courseId");
-		}
+	            if (isAdded) {
+	                response.sendRedirect(request.getContextPath() + "/lesson?courseId=" + courseId);
+	            } else {
+	                request.setAttribute("errorMessage", "Failed to create lesson. Please try again.");
+	                request.getRequestDispatcher("/Views/Lesson/createLesson.jsp").forward(request, response);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error");
+	    }
 	}
 
 	// DELETE - Delete a lesson
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String lessonIdParam = request.getParameter("lessonId");
+	        throws ServletException, IOException {
+	    // Read the JSON body of the request
+	    StringBuilder stringBuilder = new StringBuilder();
+	    String line;
+	    try (BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()))) {
+	        while ((line = reader.readLine()) != null) {
+	            stringBuilder.append(line);
+	        }
+	    }
 
-		if (lessonIdParam != null) {
-			try (Connection connection = DatabaseConnection.getConnection()) {
-				LessonDao lessonDao = new LessonDao();
-				int lessonId = Integer.parseInt(lessonIdParam);
-				boolean isDeleted = lessonDao.deleteLesson(lessonId);
-				if (isDeleted) {
-					response.getWriter().write("Lesson deleted successfully");
-				} else {
-					response.getWriter().write("Failed to delete lesson");
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error");
-			}
-		} else {
-			response.getWriter().write("Lesson ID is required");
-		}
+	    // Parse the JSON-like string manually to extract lessonId
+	    String json = stringBuilder.toString();
+	    // Extract numeric lessonId value (removing any non-digit characters)
+	    String lessonIdParam = json.replaceAll("[^0-9]", "");
+
+	    if (lessonIdParam != null) {
+	        try (Connection connection = DatabaseConnection.getConnection()) {
+	            LessonDao lessonDao = new LessonDao();
+	            int lessonId = Integer.parseInt(lessonIdParam);
+
+	            // Try to delete the lesson using the DAO
+	            if (lessonDao.deleteLesson(lessonId)) {
+	                response.setStatus(HttpServletResponse.SC_OK);
+	                response.getWriter().write("Lesson deleted successfully");
+	            } else {
+	                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	                response.getWriter().write("Failed to delete lesson");
+	            }
+	        } catch (SQLException e) {
+	            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	            response.getWriter().write("Database error occurred");
+	        }
+	    } else {
+	        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	        response.getWriter().write("Lesson ID is required");
+	    }
 	}
+
 }

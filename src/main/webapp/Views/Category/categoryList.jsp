@@ -86,7 +86,7 @@ table td {
 
 
 
-	<div class="container mt-5">
+	<div class="container mt-5" style="margin-left: 300px;">
 		<h1 class="mb-4">Category List</h1>
 
 		<!-- Button to create a new category -->

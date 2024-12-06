@@ -87,7 +87,7 @@ td:nth-child(2), th:nth-child(2) {
 			</div>
 		</div>
 	</div>
-	<div class="container mt-5">
+	<div class="container mt-5" style="margin-left: 300px;">
 		<h1 class="mb-4">Course List</h1>
 
 		<!-- Button to create new course -->
